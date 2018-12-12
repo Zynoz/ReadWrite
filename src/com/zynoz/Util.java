@@ -36,7 +36,7 @@ public final class Util<O> {
         try(final ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(path))) {
             oos.writeObject(object);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -46,12 +46,12 @@ public final class Util<O> {
      * @return Returns an optional that may or may not contain the serialized object depending on the succress of the ObjectInputStream.
      * @throws NullPointerException Throws NullPointerException if path is null.
      */
-    public Optional<O> readCollection(@NotNull final Path path) throws NullPointerException{
+    public Optional<O> readCollection(@NotNull final Path path) throws Exception {
         Objects.requireNonNull(path, "Path must not be null");
         try(final ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(path))) {
             return Optional.of((O) ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return Optional.empty();
     }
