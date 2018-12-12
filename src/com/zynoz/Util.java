@@ -46,7 +46,7 @@ public final class Util<O> {
      * @return Returns an optional that may or may not contain the serialized object depending on the succress of the ObjectInputStream.
      * @throws NullPointerException Throws NullPointerException if path is null.
      */
-    public Optional<O> readCollection(@NotNull final Path path) throws Exception {
+    public Optional<O> readCollection(@NotNull final Path path) throws NullPointerException {
         Objects.requireNonNull(path, "Path must not be null");
         try(final ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(path))) {
             return Optional.of((O) ois.readObject());
