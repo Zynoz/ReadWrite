@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @SuppressWarnings("unchecked")
-public final class Util<T> {
+public final class Util<O> {
     private static Util INSTANCE;
 
     private Util() {}
@@ -24,20 +24,32 @@ public final class Util<T> {
        return INSTANCE;
     }
 
-    public void writeCollection(@NotNull final Path path, @NotNull final Collection<T> collection) throws NullPointerException {
+    /**
+     * This method takes any object and serializes it.
+     * @param path Path to the file.
+     * @param object Object to be serialized.
+     * @throws NullPointerException Throws NullPointerException if either path or object is null.
+     */
+    public void writeCollection(@NotNull final Path path, @NotNull final O object) throws NullPointerException {
         Objects.requireNonNull(path, "Path must not be null");
-        Objects.requireNonNull(collection, "Collection must not be null");
+        Objects.requireNonNull(object, "Object must not be null");
         try(final ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(path))) {
-            oos.writeObject(collection);
+            oos.writeObject(object);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Optional<Collection<T>> readCollection(@NotNull final Path path) throws NullPointerException{
+    /**
+     * This method reads a serialized object and returns it.
+     * @param path Path to the serialized object.
+     * @return Returns an optional that may or may not contain the serialized object depending on the succress of the ObjectInputStream.
+     * @throws NullPointerException Throws NullPointerException if path is null.
+     */
+    public Optional<O> readCollection(@NotNull final Path path) throws NullPointerException{
         Objects.requireNonNull(path, "Path must not be null");
         try(final ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(path))) {
-            return Optional.of((Collection<T>) ois.readObject());
+            return Optional.of((O) ois.readObject());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
